@@ -1,6 +1,7 @@
-# INSTALL AND UPDATE PACKAGES
+# LAUNCH SERVICES
 
-apt-get update
-apt-get -y upgrade
-apt-get -y install nginx
-apt-get -y install wget
+service nginx restart
+service mysql restart
+service php7.3-fpm restart
+
+bash
