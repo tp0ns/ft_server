@@ -19,5 +19,10 @@ RUN		ln -s /etc/nginx/sites-available/localhost /etc/nginx/sites-enabled/localho
 RUN		service mysql start
 RUN		mysql --version
 
+# CONFIG PHP
+RUN		service php7.3-fpm start
+RUN		mkdir -p var/www/phpmyadmin
+RUN		wget https://files.phpmyadmin.net/phpMyAdmin/4.9.0.1/phpMyAdmin-4.9.0.1-all-languages.tar.gz
+RUN		tar -zxvf phpMyAdmin-4.9.0.1-all-languages.tar.gz --strip-components=1 -C /var/www/phpmyadmin
 
 CMD 	bash start.sh
