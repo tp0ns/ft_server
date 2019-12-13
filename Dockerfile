@@ -1,12 +1,14 @@
 FROM	debian:buster
 LABEL	maintainer="tpons@student.42.fr"
 COPY 	/srcs/start.sh .
+#was . instead of /root/
 COPY	/srcs/nginx.conf /root/
+COPY	/srcs/config.inc.php /root/
 
 #INSTALL AND UPDATE PACKAGES
 RUN		apt-get update && apt-get -y upgrade
 RUN		apt-get -y install wget nginx mariadb-server mariadb-client
-RUN		apt-get -y install php7.3 php7.3-fpm php7.3-mysql php-common php7.3-cli php7.3-common php7.3-json php7.3-opcache php7.3-readline \
+RUN		apt -y install php7.3 php7.3-fpm php7.3-mysql php-common php7.3-cli php7.3-common php7.3-json php7.3-opcache php7.3-readline \
 		php-mbstring
 
 # CONFIG NGINX
@@ -17,12 +19,19 @@ RUN		ln -s /etc/nginx/sites-available/localhost /etc/nginx/sites-enabled/localho
 
 # CONFIG mySQL
 RUN		service mysql start
-RUN		mysql --version
+# RUN		echo "CREATE USER 'root' IDENTIFIED BY 'localhost';" | mysql -u root
+# RUN		echo "CREATE DATABASE mytest;" | mysql -u root
+# RUN		echo "GRANT ALL PRIVILEGES ON mytest.* TO 'root'@'localhost';" | mysql -u root
+# RUN		echo "FLUSH PRIVILEGES;" | mysql -u root
+# RUN		echo "update mysql.user set plugin = 'mysql_native_password' where user='root';" | mysql -u root
+# RUN		mysql mytest -u root --password=  < mytest.sql
 
 # CONFIG PHP
 RUN		service php7.3-fpm start
-RUN		mkdir -p var/www/phpmyadmin
+RUN		mkdir -p var/www/html/phpmyadmin
 RUN		wget https://files.phpmyadmin.net/phpMyAdmin/4.9.0.1/phpMyAdmin-4.9.0.1-all-languages.tar.gz
-RUN		tar -zxvf phpMyAdmin-4.9.0.1-all-languages.tar.gz --strip-components=1 -C /var/www/phpmyadmin
+RUN		tar -zxvf phpMyAdmin-4.9.0.1-all-languages.tar.gz --strip-components=1 -C /var/www/html/phpmyadmin
+COPY	/srcs/config.inc.php var/www/html/phpmyadmin
+
 
 CMD 	bash start.sh
