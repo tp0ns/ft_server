@@ -4,6 +4,7 @@ COPY 	/srcs/start.sh .
 #was . instead of /root/
 COPY	/srcs/nginx.conf /root/
 COPY	/srcs/config.inc.php /root/
+COPY	/srcs/info.php /root/
 
 #INSTALL AND UPDATE PACKAGES
 RUN		apt-get update && apt-get -y upgrade
@@ -12,19 +13,24 @@ RUN		apt -y install php7.3 php7.3-fpm php7.3-mysql php-common php7.3-cli php7.3-
 		php-mbstring
 
 # CONFIG NGINX
-RUN		mkdir -p  /var/www/html
+RUN		mkdir -p /var/www/html
 COPY	/srcs/index.html /var/www/html/
 COPY	/srcs/nginx.conf /etc/nginx/sites-available/localhost
 RUN		ln -s /etc/nginx/sites-available/localhost /etc/nginx/sites-enabled/localhost
 
 # CONFIG mySQL
 RUN		service mysql start
-# RUN		echo "CREATE USER 'root' IDENTIFIED BY 'localhost';" | mysql -u root
-# RUN		echo "CREATE DATABASE mytest;" | mysql -u root
-# RUN		echo "GRANT ALL PRIVILEGES ON mytest.* TO 'root'@'localhost';" | mysql -u root
-# RUN		echo "FLUSH PRIVILEGES;" | mysql -u root
-# RUN		echo "update mysql.user set plugin = 'mysql_native_password' where user='root';" | mysql -u root
-# RUN		mysql mytest -u root --password=  < mytest.sql
+
+# CONFIG WORDPRESS
+RUN		mkdir -p /var/www/html/wordpress
+RUN		wget https://wordpress.org/latest.tar.gz 
+RUN		tar -zxvf latest.tar.gz --strip-components=1 -C /var/www/html/wordpress
+RUN		chown -R www-data:www-data /var/www/html/wordpress
+COPY	/srcs/wp-config.php /var/www/html/wordpress
+
+# CONFIG SSL
+RUN		openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
+RUN		openssl dhparam -out /etc/nginx/dhparam.pem 4096
 
 # CONFIG PHP
 RUN		service php7.3-fpm start
@@ -32,6 +38,7 @@ RUN		mkdir -p var/www/html/phpmyadmin
 RUN		wget https://files.phpmyadmin.net/phpMyAdmin/4.9.0.1/phpMyAdmin-4.9.0.1-all-languages.tar.gz
 RUN		tar -zxvf phpMyAdmin-4.9.0.1-all-languages.tar.gz --strip-components=1 -C /var/www/html/phpmyadmin
 COPY	/srcs/config.inc.php var/www/html/phpmyadmin
+COPY	/srcs/info.php var/www/html/info.php
 
 
 CMD 	bash start.sh

@@ -1,6 +1,6 @@
 <?php
 
-$cfg['blowfish_secret'] = 'VUU,keoxg;5yP{7zOXFE1V[jbz9,cGl,'; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
+$cfg['blowfish_secret'] = ''; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
 
 /**
  * Servers configuration
@@ -16,10 +16,9 @@ $cfg['Servers'][$i]['auth_type'] = 'cookie';
 /* Server parameters */
 $cfg['Servers'][$i]['host'] = 'localhost';
 $cfg['Servers'][$i]['compress'] = false;
-$cfg['Servers'][$i]['AllowNoPassword'] = true;
-$cfg['Servers'][$i]['user'] = 'root';
-$cfg['Servers'][$i]['password'] = 'root';
-
+$cfg['Servers'][$i]['AllowNoPassword'] = false;
+// $cfg['Servers'][$i]['ssl_ca'];
+// $cfg['Servers'][$i]['ssl_ca_path'];
 ?>
 
 /**
