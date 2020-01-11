@@ -29,8 +29,8 @@ RUN		chown -R www-data:www-data /var/www/html/wordpress
 COPY	/srcs/wp-config.php /var/www/html/wordpress
 
 # CONFIG SSL
-RUN		openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
-RUN		openssl dhparam -out /etc/nginx/dhparam.pem 4096
+# RUN		openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
+# RUN		openssl dhparam -out /etc/nginx/dhparam.pem 4096
 
 # CONFIG PHP
 RUN		service php7.3-fpm start
