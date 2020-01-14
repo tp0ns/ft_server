@@ -30,9 +30,10 @@ COPY	/srcs/wp-config.php /var/www/html/wordpress
 
 # CONFIG SSL
 COPY	/srcs/dhparam.pem /etc/nginx/
-COPY	/srcs/nginx-selfsigned.crt /etc/ssl/crt/
+COPY	/srcs/nginx-selfsigned.crt /etc/ssl/certs/
 COPY	/srcs/nginx-selfsigned.key /etc/ssl/private/
-COPY	/srcs/self-signed.conf /etc/nginx/snippets
+COPY	/srcs/self-signed.conf /etc/nginx/snippets/
+COPY	/srcs/ssl-params.conf /etc/nginx/snippets/
 
 # CONFIG PHP
 RUN		service php7.3-fpm start
