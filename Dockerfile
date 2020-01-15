@@ -43,5 +43,7 @@ RUN		tar -zxvf phpMyAdmin-4.9.0.1-all-languages.tar.gz --strip-components=1 -C /
 COPY	/srcs/config.inc.php var/www/html/phpmyadmin
 COPY	/srcs/info.php var/www/html/info.php
 
+#docker build . -t server
+#docker run -p 80:80 -p 443:443 -ti server
 
 CMD 	bash start.sh
